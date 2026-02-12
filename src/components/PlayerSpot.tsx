@@ -1,8 +1,8 @@
 import React from 'react';
 import Card from './Card';
 
-const PlayerSpot = ({ player, isMe, onAction, id }) => {
-    const { name, tokens, hand, bet, status, revealed, isDealer } = player;
+const PlayerSpot = ({ player, isMe, onAction, id, isDealer }: any) => {
+    const { name, tokens, hand, bet, status, revealed } = player;
 
     // Status badge color
     const getStatusColor = (s) => {

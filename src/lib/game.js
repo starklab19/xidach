@@ -242,14 +242,17 @@ class Game {
             });
 
             // Set all non-dealer players to waiting_turn
-            this.actingPlayerId = null;
             Object.values(this.players).forEach(p => {
-                if (!p.isDealer) p.status = "waiting_turn";
-                else p.status = "playing"; // Dealer is always "playing" but waits for others? Or waiting too.
+                if (!p.isDealer) {
+                    if (!p.status.startsWith('settled')) {
+                        p.status = "waiting_turn";
+                    }
+                } else {
+                    p.status = "playing";
+                }
             });
 
-            this.io.emit("gameState", this.getState());
-            this.io.emit("playerUpdate", this.getPublicPlayers()); // Show cards
+            this.nextTurn();
         });
 
         socket.on("setTurn", (targetId) => {
@@ -355,7 +358,15 @@ class Game {
             // Auto check bust
             if (player.getScore() > 21) {
                 player.status = "busted";
-                this.actingPlayerId = null; // Turn over
+                this.nextTurn();
+                return;
+            }
+
+            // Auto stand if 5 cards (Ngũ Linh limit)
+            if (player.hand.length === 5) {
+                player.status = "standing";
+                this.nextTurn();
+                return;
             }
 
             this.io.emit("playerUpdate", this.getPublicPlayers());
@@ -370,13 +381,7 @@ class Game {
             if (this.actingPlayerId !== socket.id) return;
 
             player.status = "standing";
-
-            // Auto-turn helper? 
-            // If standing, maybe reset actingPlayerId so Dealer can pick next?
-            this.actingPlayerId = null;
-
-            this.io.emit("gameState", this.getState());
-            this.io.emit("playerUpdate", this.getPublicPlayers());
+            this.nextTurn();
         });
 
         socket.on("dealerCheck", (targetPlayerId) => {
@@ -496,6 +501,27 @@ class Game {
         // Bankruptcy Check
         if (player.tokens <= 0) player.status = "bankrupt";
         if (dealer.tokens <= 0) dealer.status = "bankrupt";
+    }
+
+    nextTurn() {
+        if (this.phase !== 'playing') return;
+
+        // Find next waiting player in order
+        const nextPlayerId = this.playerOrder.find(pid => {
+            const p = this.players[pid];
+            return !p.isDealer && p.status === 'waiting_turn';
+        });
+
+        if (nextPlayerId) {
+            this.actingPlayerId = nextPlayerId;
+            this.players[nextPlayerId].status = 'acting';
+        } else {
+            // No one waiting, Dealer's turn
+            this.actingPlayerId = this.dealerId;
+        }
+
+        this.io.emit("gameState", this.getState());
+        this.io.emit("playerUpdate", this.getPublicPlayers());
     }
 
     getState() {

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Card = ({ suit, rank, hidden = false }) => {
+const Card = ({ suit, rank, hidden = false }: any) => {
     if (hidden) {
         return (
             <div className="w-16 h-24 bg-red-700 rounded-lg border-2 border-white shadow-lg flex items-center justify-center transform hover:-translate-y-1 transition-transform">

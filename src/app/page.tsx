@@ -217,6 +217,7 @@ export default function Home() {
                                     isMe={dealer?.id === myId}
                                     isDealer={true}
                                     id={`player-spot-${dealer.id}`}
+                                    phase={gameState?.phase}
                                 />
                             </div>
 
@@ -244,6 +245,7 @@ export default function Home() {
                                     player={p}
                                     isMe={p.id === myId}
                                     id={`player-spot-${p.id}`}
+                                    phase={gameState?.phase}
                                 />
                             </div>
 

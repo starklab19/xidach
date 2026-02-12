@@ -1,7 +1,7 @@
 import React from 'react';
 import Card from './Card';
 
-const PlayerSpot = ({ player, isMe, onAction, id, isDealer }: any) => {
+const PlayerSpot = ({ player, isMe, onAction, id, isDealer, phase }: any) => {
     const { name, tokens, hand, bet, status, revealed } = player;
 
     // Status badge color
@@ -50,14 +50,7 @@ const PlayerSpot = ({ player, isMe, onAction, id, isDealer }: any) => {
                             <Card
                                 suit={card.suit}
                                 rank={card.rank}
-                                hidden={!isMe && !revealed && !player.isDealer && status !== 'settled - win' && status !== 'settled - lose' && status !== 'settled - draw'}
-                            // Simplified visibility logic: 
-                            // If it's me -> show
-                            // If it's settled -> show
-                            // If it's revealed -> show
-                            // If it's dealer -> hide until settled or specific logic? 
-                            //   Actually dealer has one up one down usually? Or fully hidden? 
-                            //   In VN Xì dách, dealer holds cards hidden.
+                                hidden={!isMe && !revealed && phase !== 'payout' && !status.startsWith('settled')}
                             />
                         </div>
                     ))}

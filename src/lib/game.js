@@ -252,7 +252,7 @@ class Game {
                 }
             });
 
-            this.nextTurn();
+            // this.nextTurn(); // Removed: Dealer invites first player manually
         });
 
         socket.on("setTurn", (targetId) => {

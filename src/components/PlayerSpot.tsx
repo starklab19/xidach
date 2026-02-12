@@ -5,7 +5,7 @@ const PlayerSpot = ({ player, isMe, onAction, id, isDealer }: any) => {
     const { name, tokens, hand, bet, status, revealed } = player;
 
     // Status badge color
-    const getStatusColor = (s) => {
+    const getStatusColor = (s: any) => {
         switch (s) {
             case 'waiting': return 'bg-gray-500';
             case 'ready': return 'bg-yellow-500'; // Bet placed
@@ -39,7 +39,7 @@ const PlayerSpot = ({ player, isMe, onAction, id, isDealer }: any) => {
             {/* Cards Area */}
             <div className="flex gap-[-2rem] items-center justify-center h-28 w-full">
                 <div className="flex gap-2 relative">
-                    {hand.map((card, idx) => (
+                    {hand.map((card: any, idx: any) => (
                         <div key={idx} className={`transform ${idx > 0 ? '-ml-8' : ''} hover:z-10 transition-all`}>
                             {/* Hide if not me, not revealed, and not dealer (or dealer hidden logic) 
                         Actually server sends everything for now, so we hide here if needed.

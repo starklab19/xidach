@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export default function BankruptcyModal({ player, isDealer, onBorrow, onReplace, onTransfer, players }) {
+export default function BankruptcyModal({ player, isDealer, onBorrow, onReplace, onTransfer, players }: any) {
     const [borrowAmount, setBorrowAmount] = useState(1000);
     const [newName, setNewName] = useState("");
     const [mode, setMode] = useState("CHOICE"); // CHOICE, BORROW, REPLACE
@@ -10,7 +10,7 @@ export default function BankruptcyModal({ player, isDealer, onBorrow, onReplace,
     // For Dealer specific
     const [transferTargetId, setTransferTargetId] = useState("");
 
-    const otherPlayers = Object.values(players).filter(p => !p.isDealer);
+    const otherPlayers = Object.values(players).filter((p: any) => !p.isDealer);
 
     // If ex_dealer, show specific choice
     if (mode === "CHOICE" && player.status === 'ex_dealer') {
@@ -85,7 +85,7 @@ export default function BankruptcyModal({ player, isDealer, onBorrow, onReplace,
                     <input
                         type="number"
                         value={borrowAmount}
-                        onChange={(e) => setBorrowAmount(e.target.value)}
+                        onChange={(e: any) => setBorrowAmount(e.target.value)}
                         className="w-full bg-black/30 border border-white/50 rounded p-2 mb-4 text-center text-xl"
                     />
                     <div className="flex gap-2">
@@ -136,7 +136,7 @@ export default function BankruptcyModal({ player, isDealer, onBorrow, onReplace,
                     <h2 className="text-2xl font-black mb-4">NHƯỢNG QUYỀN</h2>
                     <p className="mb-4">Chọn người làm cái mới:</p>
                     <div className="grid grid-cols-2 gap-2 mb-4">
-                        {otherPlayers.map(p => (
+                        {otherPlayers.map((p: any) => (
                             <button
                                 key={p.id}
                                 onClick={() => setTransferTargetId(p.id)}

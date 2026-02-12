@@ -3,7 +3,7 @@
 
 import { useMemo } from "react";
 
-export default function DeckVisual({ cardsRemaining }) {
+export default function DeckVisual({ cardsRemaining }: any) {
     // Determine visuals based on cards remaining
     // 52 cards max.
     // Calculate visual thickness

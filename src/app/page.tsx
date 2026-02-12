@@ -259,7 +259,7 @@ export default function Home() {
                             {/* Dealer Actions on Players */}
                             {isDealer && gameState?.phase === 'playing' && (
                                 <div className="absolute bottom-20 left-0 w-full flex justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-20">
-                                    {!p.revealed && (
+                                    {p.hand?.length > 0 && !p.revealed && (
                                         <button
                                             onClick={() => handleCheck(p.id)}
                                             className="bg-yellow-500 hover:bg-yellow-400 text-black text-[10px] font-black px-3 py-1 rounded-full shadow-lg"
@@ -286,7 +286,7 @@ export default function Home() {
             {/* --- OVERLAYS & MODALS --- */}
 
             {/* BETTING MODAL (Only for Players during 'betting' phase) */}
-            {!isDealer && gameState?.phase === 'betting' && myPlayer?.status !== 'ready' && (
+            {!isDealer && gameState?.phase === 'betting' && myPlayer?.status !== 'ready' && myPlayer?.status !== 'bankrupt' && (
                 <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
                     <div className="bg-gradient-to-br from-red-800 to-red-900 border-4 border-yellow-500 p-8 rounded-3xl shadow-2xl max-w-sm w-full text-center">
                         <h2 className="text-3xl font-black text-yellow-400 mb-2">ĐẶT CƯỢC</h2>

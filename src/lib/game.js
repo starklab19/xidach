@@ -161,12 +161,10 @@ class Game {
             const player = this.players[socket.id];
             if (!player || !player.isDealer) return;
 
-            // Check if there are any able players
-            const ablePlayers = Object.values(this.players).filter(p => !p.isDealer && p.tokens > 0);
-            if (ablePlayers.length === 0) {
-                // Determine if we should really block or just set phase to waiting?
-                // If everyone is bankrupt/out, we can't bet.
-                this.io.emit("error", "Không đủ người chơi có tiền! Đợi họ vay đã.");
+            // Check if there are any players (even bankrupt)
+            const otherPlayers = Object.values(this.players).filter(p => !p.isDealer);
+            if (otherPlayers.length === 0) {
+                this.io.emit("error", "Cần ít nhất 1 người chơi để bắt đầu!");
                 return;
             }
 

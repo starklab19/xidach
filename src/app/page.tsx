@@ -7,13 +7,13 @@ import BankruptcyModal from "@/components/BankruptcyModal";
 import DeckVisual from "@/components/DeckVisual";
 import { useRef } from "react";
 
-let socket;
+let socket: any;
 
 export default function Home() {
     const [connected, setConnected] = useState(false);
-    const [gameState, setGameState] = useState(null);
-    const [players, setPlayers] = useState({});
-    const [myId, setMyId] = useState(null);
+    const [gameState, setGameState] = useState<any>(null);
+    const [players, setPlayers] = useState<any>({});
+    const [myId, setMyId] = useState<any>(null);
     const [enteredName, setEnteredName] = useState("");
     const [isInGame, setIsInGame] = useState(false);
     const [betAmount, setBetAmount] = useState(100);
@@ -32,18 +32,18 @@ export default function Home() {
             setMyId(socket.id);
         });
 
-        socket.on("gameState", (state) => {
+        socket.on("gameState", (state: any) => {
             setGameState(state);
         });
 
-        socket.on("playerUpdate", (p) => {
+        socket.on("playerUpdate", (p: any) => {
             setPlayers(prev => {
                 prevPlayersRef.current = prev;
                 return p;
             });
         });
 
-        socket.on("error", (msg) => {
+        socket.on("error", (msg: any) => {
             alert(msg);
         });
 
@@ -122,27 +122,27 @@ export default function Home() {
         socket.emit("stand");
     };
 
-    const handleCheck = (targetId) => {
+    const handleCheck = (targetId: any) => {
         socket.emit("dealerCheck", targetId);
     };
 
-    const handleSetTurn = (targetId) => {
+    const handleSetTurn = (targetId: any) => {
         socket.emit("setTurn", targetId);
     }
 
-    const handleBorrow = (amount) => {
+    const handleBorrow = (amount: any) => {
         socket.emit("borrow", amount);
     };
 
-    const handleReplace = (name) => {
+    const handleReplace = (name: any) => {
         socket.emit("replacePlayer", name);
     };
 
-    const handleTransfer = (targetId) => {
+    const handleTransfer = (targetId: any) => {
         socket.emit("transferDealer", targetId);
     };
 
-    const handleSetMode = (mode) => {
+    const handleSetMode = (mode: any) => {
         socket.emit("setDealerMode", mode);
     };
 
@@ -151,12 +151,12 @@ export default function Home() {
     const isDealer = myPlayer?.isDealer;
     const dealerId = gameState?.dealerId;
     const dealer = players[dealerId];
-    const otherPlayers = Object.values(players).filter(p => !p.isDealer);
+    const otherPlayers = Object.values(players).filter((p: any) => !p.isDealer);
     const actingPlayerId = gameState?.actingPlayerId;
     const dealerMode = gameState?.dealerMode || "FIXED";
 
     // Leaderboard Data
-    const sortedPlayers = Object.values(players).sort((a, b) => b.tokens - a.tokens);
+    const sortedPlayers = Object.values(players).sort((a: any, b: any) => b.tokens - a.tokens);
 
     if (!isInGame) {
         return (
@@ -168,7 +168,7 @@ export default function Home() {
                     <input
                         type="text"
                         value={enteredName}
-                        onChange={(e) => setEnteredName(e.target.value)}
+                        onChange={(e: any) => setEnteredName(e.target.value)}
                         placeholder="Tên của bạn..."
                         className="w-full text-lg p-3 border-2 border-red-100 rounded-xl mb-4 focus:outline-none focus:border-red-500 text-center text-black font-bold"
                     />
@@ -237,7 +237,7 @@ export default function Home() {
 
                 {/* Players Grid */}
                 <div className="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 px-4 max-w-7xl">
-                    {otherPlayers.map(p => (
+                    {otherPlayers.map((p: any) => (
                         <div key={p.id} className={`relative group transition-all duration-300 ${actingPlayerId === p.id ? 'scale-105 z-10' : 'opacity-90'}`}>
                             <div className={actingPlayerId === p.id ? 'ring-4 ring-green-500 rounded-xl shadow-[0_0_20px_rgba(34,197,94,0.6)]' : ''}>
                                 <PlayerSpot
@@ -295,7 +295,7 @@ export default function Home() {
                             <input
                                 type="number"
                                 value={betAmount}
-                                onChange={(e) => setBetAmount(e.target.value)}
+                                onChange={(e: any) => setBetAmount(e.target.value)}
                                 className="w-32 bg-black/30 border-2 border-yellow-500/50 rounded-xl px-2 py-3 text-white text-center text-2xl font-bold focus:outline-none focus:border-yellow-500"
                             />
                             <button onClick={() => setBetAmount(curr => parseInt(curr) + 100)} className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-2xl font-bold text-white">+</button>
@@ -348,7 +348,7 @@ export default function Home() {
                                 <h3 className="font-bold text-xl mb-4 border-b-2 border-red-100 pb-2">Kết Quả Ván Này</h3>
                                 <div className="space-y-2 max-h-60 overflow-auto">
                                     {/* Sort results: Winners first */}
-                                    {Object.values(players).filter(p => !p.isDealer).sort((a, b) => b.tokens - a.tokens).map(p => (
+                                    {Object.values(players).filter((p: any) => !p.isDealer).sort((a: any, b: any) => b.tokens - a.tokens).map((p: any) => (
                                         <div key={p.id} className="flex justify-between items-center p-2 rounded bg-gray-50">
                                             <span className="font-bold">{p.name}</span>
                                             <span className={`font-bold ${p.status.includes('win') ? 'text-green-600' : p.status.includes('lose') ? 'text-red-500' : 'text-gray-500'}`}>
@@ -362,7 +362,7 @@ export default function Home() {
                             <div>
                                 <h3 className="font-bold text-xl mb-4 border-b-2 border-yellow-200 pb-2 text-yellow-600">🏆 Bảng Xếp Hạng</h3>
                                 <div className="space-y-2">
-                                    {sortedPlayers.slice(0, 5).map((p, idx) => (
+                                    {sortedPlayers.slice(0, 5).map((p: any, idx) => (
                                         <div key={p.id} className="flex justify-between items-center">
                                             <div className="flex gap-2">
                                                 <span className={`font-bold w-6 ${idx === 0 ? 'text-yellow-500' : idx === 1 ? 'text-gray-400' : idx === 2 ? 'text-orange-400' : 'text-gray-300'}`}>#{idx + 1}</span>

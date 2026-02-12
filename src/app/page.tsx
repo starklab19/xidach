@@ -16,10 +16,10 @@ export default function Home() {
     const [myId, setMyId] = useState<any>(null);
     const [enteredName, setEnteredName] = useState("");
     const [isInGame, setIsInGame] = useState(false);
-    const [betAmount, setBetAmount] = useState(100);
+    const [betAmount, setBetAmount] = useState<any>(100);
 
     const [flyingCards, setFlyingCards] = useState<any[]>([]);
-    const prevPlayersRef = useRef({});
+    const prevPlayersRef = useRef<any>({});
 
     useEffect(() => {
         // Only init socket once
@@ -37,7 +37,7 @@ export default function Home() {
         });
 
         socket.on("playerUpdate", (p: any) => {
-            setPlayers(prev => {
+            setPlayers((prev: any) => {
                 prevPlayersRef.current = prev;
                 return p;
             });
@@ -291,14 +291,14 @@ export default function Home() {
                         <p className="text-white/80 mb-2">Bạn có: <span className="text-yellow-400 font-bold">{myPlayer?.tokens?.toLocaleString()}</span></p>
 
                         <div className="flex items-center justify-center gap-4 mb-4">
-                            <button onClick={() => setBetAmount(curr => Math.max(0, parseInt(curr) - 100))} className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-2xl font-bold text-white">-</button>
+                            <button onClick={() => setBetAmount((curr: any) => Math.max(0, parseInt(curr) - 100))} className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-2xl font-bold text-white">-</button>
                             <input
                                 type="number"
                                 value={betAmount}
                                 onChange={(e: any) => setBetAmount(e.target.value)}
                                 className="w-32 bg-black/30 border-2 border-yellow-500/50 rounded-xl px-2 py-3 text-white text-center text-2xl font-bold focus:outline-none focus:border-yellow-500"
                             />
-                            <button onClick={() => setBetAmount(curr => parseInt(curr) + 100)} className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-2xl font-bold text-white">+</button>
+                            <button onClick={() => setBetAmount((curr: any) => parseInt(curr) + 100)} className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-2xl font-bold text-white">+</button>
                         </div>
 
                         {/* Max Bet Button */}

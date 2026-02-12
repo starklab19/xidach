@@ -212,6 +212,35 @@ class Game {
                 });
             }
 
+            // --- AUTO WIN CHECKS ---
+            const dealer = this.players[this.dealerId];
+            const dealerSpecial = dealer.getHandType();
+
+            // 1. If Dealer has Xì Dách / Xì Bàng -> End Game Immediately
+            if (dealerSpecial === "XI_DACH" || dealerSpecial === "XI_BANG") {
+                this.phase = "payout";
+                Object.values(this.players).forEach(p => {
+                    if (p.id !== this.dealerId) {
+                        p.revealed = true; // Show all hands
+                        this.settleOne(dealer, p);
+                    }
+                });
+                this.io.emit("gameState", this.getState());
+                this.io.emit("playerUpdate", this.getPublicPlayers());
+                return;
+            }
+
+            // 2. If Player has Xì Dách / Xì Bàng (and Dealer doesn't) -> Player wins immediately
+            Object.values(this.players).forEach(p => {
+                if (p.id !== this.dealerId) {
+                    const pSpecial = p.getHandType();
+                    if (pSpecial === "XI_DACH" || pSpecial === "XI_BANG") {
+                        p.revealed = true; // Reveal player's hand
+                        this.settleOne(dealer, p); // Settle immediately
+                    }
+                }
+            });
+
             // Set all non-dealer players to waiting_turn
             this.actingPlayerId = null;
             Object.values(this.players).forEach(p => {
